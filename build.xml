@@ -94,23 +94,29 @@ description="Calculate software metrics using PHP_Depend">
  </target>
 
  <!-- Generate checkstyle.xml -->
- <target name="phpcs">
-  <exec executable="phpcs">
-   <arg line="--report=checkstyle
-              --report-file=${basedir}/build/logs/checkstyle.xml
-              --standard=build/phpcs.xml
-              --ignore=autoload.php
-              ${source}" />
-  </exec>
- </target>
+ 
+<target name="phpcs"
+description="Find coding standard violations using PHP_CodeSniffer">
+<exec executable="phpcs" output="/dev/null">
+<arg value="--report=checkstyle" />
+<arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+<arg value="--standard=${basedir}/build/phpcs.xml" />
+<arg path="${basedir}/src" />
+</exec>
+</target>
 
  <!-- Use PHP_Documentor to generate API documentation -->
- <target name="phpdoc">
-  <exec executable="phpdoc">
-   <arg line="--directory ${source}
-              --target    ${basedir}/build/api" />
-  </exec>
- </target>
+
+ <target name="phpdoc"
+description="Generate API documentation using PHPDocumentor">
+<exec executable="phpdoc">
+<arg value="--directory" />
+<arg path="${basedir}/src" />
+<arg value="--target" />
+<arg path="${basedir}/build/api" />
+</exec>
+</target>
+
 
  <target name="phpcb">
   <exec executable="phpcb">
