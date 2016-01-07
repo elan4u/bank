@@ -4,7 +4,14 @@
 <project name="BankAccount" default="build" basedir=".">
  <property name="source" value="src"/>
  <property name="source_comma_sep" value="src"/>
-
+ <property name="pdepend" value="pdepend"/>
+ <property name="phpcpd" value="phpcpd"/>
+ <property name="phpcs" value="phpcs"/>
+ <property name="phpdox" value="phpdox"/>
+ <property name="phploc" value="phploc"/>
+ <property name="phpmd" value="phpmd"/>
+ <property name="phpunit" value="phpunit"/>
+ 
  <target name="clean">
   <!-- Clean up -->
   <delete dir="${basedir}/build/api"/>
@@ -42,9 +49,10 @@
     <antcall target="phpmd"/>
    </sequential>
    <antcall target="phpcpd"/>
-   <antcall target="phpcs"/>
+   <antcall target="phpcpd-ci"/>
+   <antcall target="phpcs-ci"/>
+   <antcall target="phploc-ci"/>
    <antcall target="phpdoc"/>
-   <antcall target="phploc"/>
   </parallel>
  </target>
 
@@ -69,11 +77,22 @@
  </target>
 
  <!-- Generate pmd-cpd.xml -->
- <target name="phpcpd">
-  <exec executable="phpcpd">
-   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml
-              ${source}" />
+  <target name="phpcpd" unless="phpcpd.done" description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
+  <exec executable="${phpcpd}" taskname="phpcpd">
+   <arg path="${basedir}/src"/>
   </exec>
+
+  <property name="phpcpd.done" value="true"/>
+ </target>
+ 
+  <target name="phpcpd-ci" unless="phpcpd.done" depends="prepare" description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
+  <exec executable="${phpcpd}" taskname="phpcpd">
+   <arg value="--log-pmd"/>
+   <arg path="${basedir}/build/logs/pmd-cpd.xml"/>
+   <arg path="${basedir}/src"/>
+  </exec>
+
+  <property name="phpcpd.done" value="true"/>
  </target>
 
  <!-- Generate phploc.csv -->
