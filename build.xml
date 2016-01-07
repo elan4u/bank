@@ -36,9 +36,9 @@
  </target>
 
  <!-- Run unit tests and generate junit.xml and clover.xml -->
- <target name="phpunit">
-  <exec executable="phpunit" failonerror="true"/>
- </target>
+<target name="phpunit" description="Run unit tests with PHPUnit">
+<exec executable="phpunit" failonerror="true"/>
+</target>
 
  <!-- Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks
       in parallel using a maximum of 2 threads. -->
