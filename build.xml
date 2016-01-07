@@ -56,15 +56,16 @@
  </target>
 
  <!-- Generate jdepend.xml and software metrics charts -->
-<target name="pdepend"
-description="Calculate software metrics using PHP_Depend">
-<exec executable="pdepend">
-<arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
-<arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
-<arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
-<arg path="${basedir}/src" />
-</exec>
-</target>
+<target name="pdepend" unless="pdepend.done" depends="prepare" description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
+  <exec executable="${pdepend}" taskname="pdepend">
+   <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml"/>
+   <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg"/>
+   <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg"/>
+   <arg path="${basedir}/src"/>
+  </exec>
+
+  <property name="pdepend.done" value="true"/>
+ </target>
 
  <!-- Generate pmd.xml -->
  <target name="phpmd">
