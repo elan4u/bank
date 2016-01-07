@@ -69,21 +69,23 @@
  </target>
 
  <!-- Generate pmd-cpd.xml -->
- <target name="phpcpd">
-  <exec executable="phpcpd">
-   <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml
-              ${source}" />
-  </exec>
- </target>
+
+ <target name="phpcpd" description="Find duplicate code using PHPCPD">
+<exec executable="phpcpd">
+<arg value="--log-pmd" />
+<arg value="${basedir}/build/logs/pmd-cpd.xml" />
+<arg path="${basedir}/src" />
+</exec>
+</target>
 
  <!-- Generate phploc.csv -->
- <target name="phploc">
-  <exec executable="phploc">
-   <arg line="--log-csv ${basedir}/build/logs/phploc.csv
-              ${source}" />
-  </exec>
- </target>
-
+<target name="phploc" description="Measure project size using PHPLOC">
+<exec executable="phploc">
+<arg value="--log-csv" />
+<arg value="${basedir}/build/logs/phploc.csv" />
+<arg path="${basedir}/src" />
+</exec>
+</target>
  <!-- Generate checkstyle.xml -->
  <target name="phpcs">
   <exec executable="phpcs">
