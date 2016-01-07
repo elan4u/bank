@@ -47,6 +47,7 @@
    <sequential>
     <antcall target="pdepend"/>
     <antcall target="phpmd"/>
+	 <antcall target="phpmd-ci"/>
    </sequential>
    <antcall target="phpcpd"/>
    <antcall target="phpcs"/>
@@ -68,14 +69,29 @@
  </target>
 
  <!-- Generate pmd.xml -->
- <target name="phpmd">
-  <exec executable="phpmd">
-   <arg line="${source_comma_sep}
-              xml
-              build/phpmd.xml
-              --reportfile ${basedir}/build/logs/pmd.xml" />
+
+  <target name="phpmd" unless="phpmd.done" description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+  <exec executable="${phpmd}" taskname="phpmd">
+   <arg path="${basedir}/src"/>
+   <arg value="text"/>
+   <arg path="${basedir}/build/phpmd.xml"/>
   </exec>
+
+  <property name="phpmd.done" value="true"/>
  </target>
+
+ <target name="phpmd-ci" unless="phpmd.done" description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
+  <exec executable="${phpmd}" taskname="phpmd">
+   <arg path="${basedir}/src"/>
+   <arg value="xml"/>
+   <arg path="${basedir}/build/phpmd.xml"/>
+   <arg value="--reportfile"/>
+   <arg path="${basedir}/build/logs/pmd.xml"/>
+  </exec>
+
+  <property name="phpmd.done" value="true"/>
+ </target>
+
 
  <!-- Generate pmd-cpd.xml -->
  <target name="phpcpd" description="Find duplicate code using PHPCPD">
